@@ -90,7 +90,7 @@ void main() {
     
     float dist = distance(uv,hover);
 
-    newposition.z += hoverState*10.*sin(dist*10. + time);
+    newposition.z += hoverState *10.*sin(dist*10. + time/2.);
 
     // newposition.z += 0.05*sin(dist*40. );
 
