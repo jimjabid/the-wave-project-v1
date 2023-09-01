@@ -6,6 +6,7 @@ import Scroll from "./scroll";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import fragment from "./shaders/fragment.glsl";
 import vertex from "./shaders/vertex.glsl";
+import { loader } from "./loader";
 
 //mport ocean from "/img/ocean.jpg";
 
@@ -46,7 +47,7 @@ export default class Sketch {
     });
 
     const fontPlayfair = new Promise((resolve) => {
-      new FontFaceObserver("Playfair Display").load().then(() => {
+      new FontFaceObserver("Permanent Marker").load().then(() => {
         resolve();
       });
     });
@@ -234,3 +235,5 @@ export default class Sketch {
 new Sketch({
   dom: document.getElementById("container"),
 });
+
+loader();

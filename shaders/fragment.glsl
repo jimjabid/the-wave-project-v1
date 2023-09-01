@@ -17,5 +17,5 @@ void main()	{
     //gl_FragColor = oceanView + 0.5*vec4(vNoise);
     // gl_FragColor = vec4(vNoise,0.,0.,1.);
      gl_FragColor = oceanView;
-     gl_FragColor.rgb += 0.05*vec3(vNoise);
+    // gl_FragColor.rgb += 0.05*vec3(vNoise);
 }
