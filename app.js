@@ -6,7 +6,11 @@ import Scroll from "./scroll";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import fragment from "./shaders/fragment.glsl";
 import vertex from "./shaders/vertex.glsl";
+import noise from "./shaders/noise.glsl";
 import { loader } from "./loader";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 
 //mport ocean from "/img/ocean.jpg";
 
@@ -74,6 +78,7 @@ export default class Sketch {
       this.mouseMovement();
       this.resize();
       this.setupResize();
+      this.composerPass();
       // this.addObjects();
       this.render();
       // window.addEventListener('scroll',()=>{
@@ -82,6 +87,57 @@ export default class Sketch {
       // })
     });
   }
+
+  composerPass() {
+    this.composer = new EffectComposer(this.renderer);
+    this.renderPass = new RenderPass(this.scene, this.camera);
+    this.composer.addPass(this.renderPass);
+
+    //custom shader pass
+    var counter = 0.0;
+    this.myEffect = {
+      uniforms: {
+        tDiffuse: { value: null },
+        scrollSpeed: { value: null },
+        time: { value: null },
+      },
+      vertexShader: `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix 
+          * modelViewMatrix 
+          * vec4( position, 1.0 );
+      }
+      `,
+      fragmentShader: `
+      uniform sampler2D tDiffuse;
+      varying vec2 vUv;
+      uniform float scrollSpeed;
+      uniform float time;
+      ${noise}
+      void main(){
+        vec2 newUV = vUv;
+        float area = smoothstep(1.,0.8,vUv.y)*2. - 1.;
+        float area1 = smoothstep(0.4,0.0,vUv.y);
+        area1 = pow(area1,4.);
+        float noise = 0.5*(cnoise(vec3(vUv*10.,time/5.)) + 1.);
+        float n = smoothstep(0.5,0.51, noise + area/2.);
+        newUV.x -= (vUv.x - 0.5)*0.1*area1*scrollSpeed;
+        gl_FragColor = texture2D( tDiffuse, newUV);
+      //   gl_FragColor = vec4(n,0.,0.,1.);
+      gl_FragColor = mix(vec4(1.),texture2D( tDiffuse, newUV),n);
+      // gl_FragColor = vec4(area,0.,0.,1.);
+      }
+      `,
+    };
+
+    this.customPass = new ShaderPass(this.myEffect);
+    this.customPass.renderToScreen = true;
+
+    this.composer.addPass(this.customPass);
+  }
+
   mouseMovement() {
     window.addEventListener(
       "mousemove",
@@ -220,14 +276,16 @@ export default class Sketch {
     this.scroll.render();
     this.currentScroll = this.scroll.scrollToRender;
     this.setPosition();
-
+    this.customPass.uniforms.scrollSpeed.value = this.scroll.speedTarget;
     // this.material.uniforms.time.value = this.time;
+    this.customPass.uniforms.time.value = this.time;
 
     this.materials.forEach((m) => {
       m.uniforms.time.value = this.time;
     });
 
-    this.renderer.render(this.scene, this.camera);
+    this.composer.render();
+    //this.renderer.render(this.scene, this.camera);
     window.requestAnimationFrame(this.render.bind(this));
   }
 }
