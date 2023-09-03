@@ -14,6 +14,26 @@ body {
   /* overflow: hidden; */
 }
 
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
 ::-webkit-scrollbar {
   width: 0.6rem;
   border-radius: 0.5rem;
@@ -29,7 +49,6 @@ body {
 }
 
 .ocean {
-  height: 50%;
   width: 100%;
   position: fixed;
   bottom: 0;
@@ -88,7 +107,7 @@ body {
 .page {
   width: min(90%, 1200px);
   margin: 0 auto;
-  opacity: 0;
+  /* opacity: 0; */
   /* border: 1px solid #000; */
 }
 header {
@@ -144,6 +163,7 @@ h2 {
   width: 100%;
   display: block;
   opacity: 0;
+  z-index: -5;
 }
 .item__image {
   position: relative;
@@ -193,8 +213,12 @@ h2 {
 }
 
 @media screen and (max-width: 600px) {
+  .loading-text {
+    font-size: 50px;
+  }
   .grid {
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
   .item_v,
   .item_h {
@@ -204,6 +228,7 @@ h2 {
   .item img {
     width: 100%;
     max-width: none;
+    opacity: 1;
   }
 }
 
@@ -214,5 +239,5 @@ h2 {
   z-index: -1;
   top: 0;
   left: 0;
-  opacity: 0;
+  /* opacity: 0; */
 }

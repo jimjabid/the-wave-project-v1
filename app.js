@@ -11,6 +11,7 @@ import { loader } from "./loader";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { smoothScroll } from "./smoothSCroll";
 
 //mport ocean from "/img/ocean.jpg";
 
@@ -170,7 +171,9 @@ export default class Sketch {
     this.height = this.container.offsetHeight;
     this.renderer.setSize(this.width, this.height);
     this.camera.aspect = this.width / this.height;
+
     this.camera.updateProjectionMatrix();
+    this.setPosition();
   }
 
   addImages() {
@@ -193,12 +196,7 @@ export default class Sketch {
     this.imageStore = this.images.map((img) => {
       let bounds = img.getBoundingClientRect();
 
-      let geometry = new THREE.PlaneGeometry(
-        bounds.width,
-        bounds.height,
-        10,
-        10
-      );
+      let geometry = new THREE.PlaneGeometry(1, 1, 10, 10);
       let texture = new THREE.Texture(img);
       texture.needsUpdate = true;
       // let material = new THREE.MeshBasicMaterial({
@@ -226,6 +224,7 @@ export default class Sketch {
       material.uniforms.uImage.value = texture;
 
       let mesh = new THREE.Mesh(geometry, material);
+      mesh.scale.set(bounds.width, bounds.height, 1);
 
       this.scene.add(mesh);
 
@@ -290,8 +289,15 @@ export default class Sketch {
   }
 }
 
-new Sketch({
-  dom: document.getElementById("container"),
-});
+// new Sketch({
+//   dom: document.getElementById("container"),
+// });
+if (window.innerWidth >= 601) {
+  new Sketch({
+    dom: document.getElementById("container"),
+  });
+
+  smoothScroll();
+}
 
 loader();
