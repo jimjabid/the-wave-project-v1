@@ -1,21 +1,27 @@
 import { gsap } from "gsap";
+import SplitTextJS from "./utils/splitText";
 
 export function loader() {
-  const container = document.querySelector("#container");
-  const pages = document.querySelectorAll(".page");
+  const title = document.querySelector(".loading-text");
+  const splitTitle = new SplitTextJS(title);
+  console.log(splitTitle.chars);
 
   const loaderTimeline = gsap
     .timeline()
-    .to(".loading-text", {
-      duration: 3,
-      top: 50,
+    .to(title, {
       opacity: 1,
       ease: "power3.out",
+    })
+    .to(splitTitle.chars, {
+      duration: 2.5,
+      yPercent: -100,
+      stagger: 0.09,
+      opacity: 1,
+      ease: "elastic.out(1, 0.75)",
     })
     .to(".ocean", {
       duration: 3,
       height: "100%",
-      // ease: "slow(0.1, 0.1, false)",
       ease: "power3.out",
     })
     .to(
@@ -27,16 +33,15 @@ export function loader() {
       "<+=1.25"
     )
     .to(
-      container,
+      "#container",
       {
         opacity: 1,
-        // ease: "power3.out",
         ease: "slow(0.1, 0.1, false)",
       },
       "<"
     )
     .to(
-      pages,
+      ".page",
       {
         opacity: 1,
         duration: 3,
@@ -44,8 +49,5 @@ export function loader() {
       },
       "<"
     );
-
-  //4,85
-
   return loaderTimeline;
 }
