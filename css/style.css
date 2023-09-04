@@ -228,7 +228,7 @@ h2 {
   .item img {
     width: 100%;
     max-width: none;
-    opacity: 1;
+    /* opacity: 1; */
   }
 }
 

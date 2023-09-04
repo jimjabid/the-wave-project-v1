@@ -42,6 +42,7 @@ export default class Sketch {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     this.images = [...document.querySelectorAll("img")];
+    this.loader = new THREE.TextureLoader();
 
     const fontOpen = new Promise((resolve) => {
       new FontFaceObserver("Open Sans").load().then(() => {
@@ -195,12 +196,9 @@ export default class Sketch {
       let bounds = img.getBoundingClientRect();
 
       let geometry = new THREE.PlaneGeometry(1, 1, 10, 10);
-      let texture = new THREE.Texture(img);
-      texture.needsUpdate = true;
-      // let material = new THREE.MeshBasicMaterial({
-      //     // color: 0xff0000,
-      //     map: texture
-      // })
+      //let texture = new THREE.Texture(img);
+      let texture = this.loader.load(img.src);
+      // texture.needsUpdate = true;
 
       let material = this.material.clone();
 
@@ -236,7 +234,7 @@ export default class Sketch {
       };
     });
 
-    console.log(this.imageStore);
+    // console.log(this.imageStore);
   }
 
   setPosition() {
