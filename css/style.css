@@ -54,6 +54,7 @@ html.lenis {
   bottom: 0;
   left: 0;
   background: #015871;
+  container: inline-size;
   /* z-index: -1; */
   /* overflow: hidden; */
 }
@@ -61,10 +62,26 @@ html.lenis {
 .loading-text {
   opacity: 0;
   top: 50%;
-  font-size: 150px;
+  font-size: 10cqw;
   z-index: 4;
   /* top: 100%; */
   color: #e1e3e3;
+}
+
+@media screen and (max-width: 1298px) {
+  .loading-text {
+    font-size: 8cqw;
+  }
+}
+@media screen and (max-width: 1089px) {
+  .loading-text {
+    font-size: 7cqw;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .loading-text {
+    font-size: 15cqw;
+  }
 }
 
 .wave {
@@ -102,6 +119,32 @@ html.lenis {
   50% {
     transform: translate3d(0, 5px, 0);
   }
+}
+
+body {
+  background: rgb(181, 204, 232);
+  background: -moz-radial-gradient(
+    circle,
+    rgba(181, 204, 232, 1) 0%,
+    rgba(185, 190, 235, 1) 38%,
+    rgba(229, 231, 245, 1) 70%,
+    rgba(249, 249, 249, 1) 100%
+  );
+  background: -webkit-radial-gradient(
+    circle,
+    rgba(181, 204, 232, 1) 0%,
+    rgba(185, 190, 235, 1) 38%,
+    rgba(229, 231, 245, 1) 70%,
+    rgba(249, 249, 249, 1) 100%
+  );
+  background: radial-gradient(
+    circle,
+    rgba(181, 204, 232, 1) 0%,
+    rgba(185, 190, 235, 1) 38%,
+    rgba(229, 231, 245, 1) 70%,
+    rgba(249, 249, 249, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b5cce8",endColorstr="#f9f9f9",GradientType=1);
 }
 
 .page {
@@ -213,9 +256,9 @@ h2 {
 }
 
 @media screen and (max-width: 600px) {
-  .loading-text {
+  /* .loading-text {
     font-size: 50px;
-  }
+  } */
   .grid {
     display: flex;
     flex-direction: column;

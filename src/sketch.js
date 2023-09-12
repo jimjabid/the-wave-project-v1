@@ -126,7 +126,7 @@ export default class Sketch {
         newUV.x -= (vUv.x - 0.5)*0.1*area1*scrollSpeed;
         gl_FragColor = texture2D( tDiffuse, newUV);
       //   gl_FragColor = vec4(n,0.,0.,1.);
-      gl_FragColor = mix(vec4(1.),texture2D( tDiffuse, newUV),n);
+      gl_FragColor = mix(vec4(0.941,0.945,0.969,1.),texture2D( tDiffuse, newUV),n);
       // gl_FragColor = vec4(area,0.,0.,1.);
       }
       `,
