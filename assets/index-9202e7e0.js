@@ -3595,7 +3595,7 @@ void main()	{
     
     
      gl_FragColor = oceanView;
-    
+    gl_FragColor.rgb += 0.05*vec3(vNoise);
 }`,mc=`vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
 vec3 fade(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
@@ -3810,7 +3810,7 @@ float cnoise(vec3 P){
         newUV.x -= (vUv.x - 0.5)*0.1*area1*scrollSpeed;
         gl_FragColor = texture2D( tDiffuse, newUV);
       //   gl_FragColor = vec4(n,0.,0.,1.);
-      gl_FragColor = mix(vec4(1.),texture2D( tDiffuse, newUV),n);
+      gl_FragColor = mix(vec4(0.941,0.945,0.969,1.),texture2D( tDiffuse, newUV),n);
       // gl_FragColor = vec4(area,0.,0.,1.);
       }
       `},this.customPass=new eh(this.myEffect),this.customPass.renderToScreen=!0,this.composer.addPass(this.customPass)}mouseMovement(){window.addEventListener("mousemove",e=>{this.mouse.x=e.clientX/this.width*2-1,this.mouse.y=-(e.clientY/this.height)*2+1,this.raycaster.setFromCamera(this.mouse,this.camera);const t=this.raycaster.intersectObjects(this.scene.children);if(t.length>0){let n=t[0].object;n.material.uniforms.hover.value=t[0].uv}},!1)}setupResize(){window.addEventListener("resize",this.resize.bind(this))}resize(){this.width=this.container.offsetWidth,this.height=this.container.offsetHeight,this.renderer.setSize(this.width,this.height),this.camera.aspect=this.width/this.height,this.camera.updateProjectionMatrix(),this.setPosition()}addImages(){this.material=new un({uniforms:{time:{value:0},uImage:{value:0},hover:{value:new we(.5,.5)},hoverState:{value:0}},side:sn,fragmentShader:pc,vertexShader:mc}),this.materials=[],this.imageStore=this.images.map(e=>{let t=e.getBoundingClientRect(),n=new Fr(1,1,10,10),i=this.loader.load(e.src),s=this.material.clone();e.addEventListener("mouseenter",()=>{bs.to(s.uniforms.hoverState,{duration:1,value:1})}),e.addEventListener("mouseout",()=>{bs.to(s.uniforms.hoverState,{duration:1,value:0})}),this.materials.push(s),s.uniforms.uImage.value=i;let a=new ln(n,s);return a.scale.set(t.width,t.height,1),this.scene.add(a),{img:e,mesh:a,top:t.top,left:t.left,width:t.width,height:t.height}})}setPosition(){this.imageStore.forEach(e=>{e.mesh.position.y=this.currentScroll-e.top+this.height/2-e.height/2,e.mesh.position.x=e.left-this.width/2+e.width/2})}addObjects(){this.geometry=new Fr(200,400,10,10),this.material=new H0,this.material=new un({uniforms:{time:{value:0}},side:sn,fragmentShader:pc,vertexShader:mc,wireframe:!0}),this.mesh=new ln(this.geometry,this.material),this.scene.add(this.mesh)}render(){this.time+=.05,this.scroll.render(),this.currentScroll=this.scroll.scrollToRender,this.setPosition(),this.customPass.uniforms.scrollSpeed.value=this.scroll.speedTarget,this.customPass.uniforms.time.value=this.time,this.materials.forEach(e=>{e.uniforms.time.value=this.time}),this.composer.render(),window.requestAnimationFrame(this.render.bind(this))}}new uv({dom:document.getElementById("container")});yf();
